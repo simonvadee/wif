@@ -32,13 +32,20 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		wif, err = btcutil.NewWIF(sk, &chaincfg.MainNetParams, false)
+		wif, err = btcutil.NewWIF(sk, &chaincfg.MainNetParams, true)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
 
-	addr, err := btcutil.NewAddressPubKey(sk.PubKey().SerializeUncompressed(), &chaincfg.MainNetParams)
+	var pubKey []byte
+	switch wif.CompressPubKey {
+	case true:
+		pubKey =sk.PubKey().SerializeCompressed()
+	case false:
+		pubKey = sk.PubKey().SerializeUncompressed()
+	}
+	addr, err := btcutil.NewAddressPubKey(pubKey, &chaincfg.MainNetParams)
 	if err != nil {
 		log.Fatal(err)
 	}
