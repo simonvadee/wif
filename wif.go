@@ -11,9 +11,11 @@ import (
 
 var existing string
 var testnet bool
+var compress bool
 func init() {
-	flag.StringVar(&existing, "decode", "", "Existing WIF")
+	flag.StringVar(&existing, "import", "", "Existing WIF")
 	flag.BoolVar(&testnet, "testnet", false, "Use testnet configuration")
+	flag.BoolVar(&compress, "compress", false, "Compress public key")
 	flag.Parse()
 }
 
@@ -38,7 +40,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		wif, err = btcutil.NewWIF(sk, netParams, true)
+		wif, err = btcutil.NewWIF(sk, netParams, compress)
 		if err != nil {
 			log.Fatal(err)
 		}
